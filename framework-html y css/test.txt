@@ -1,0 +1,12 @@
+ //TRATAMIENTO DE EXCEPTION CUANDO NO SE HA PODIDO RUTEAR
+ if (mResults == null) {
+            Toast.makeText(MainActivity.this, mException.getMessage().toString(),
+                    Toast.LENGTH_LONG).show();
+            curDirections = null;
+            return;
+        }
+//CONTROL TOGGLE
+        if(mResults!=null){
+            toggle.setChecked(false);
+        }
+	mMapView.setExtent(curRoute.getEnvelope(), 250);
