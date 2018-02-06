@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--The application was designed with MVVM (KO.js helps to apply this pattern)->http://knockoutjs.com/documentation/observables.html
+  .Also has a controller to match view with logic operations,which can update the model.Moreover, it pass the logic operations result to the view.
+-->
+<meta charset="utf-8">
+<title>Super Simple Stock Market</title>
+<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="css/styles.css" type="text/css">
+<!-- JQuery -->
+<script type='text/javascript' src='js/libs/jquery-3.2.1.min.js'></script>
+<!-- Bootstrap -->
+<link href="css/bootstrap-min/bootstrap.min.css" rel="stylesheet">
+<script src="js/libs/bootstrap.min.js"></script>
+<!-- Knockout -->
+<script type='text/javascript' src='js/libs/knockout-3.4.2.js'></script>
+<!-- App js files-->
+<script type='text/javascript' src="js/data/viewModel.js"   defer="defer"></script>
+<script type='text/javascript' src="js/init.js"></script>
+<script type='text/javascript' src="js/utils.js"></script>
+<script type='text/javascript' src="js/logicFunctions.js"></script>
+<script type='text/javascript' src="js/controller.js"></script>
+</head>
+<body class="container">
+  <div >
+    <h2>Super Simple Stock Market</h2>
+    <div class="h-divider"></div>
+  </div>
+</br>
+
+<div class="row ">
+  <ul  id="list"class="nav nav-pills nav-stacked col-md-3"  >
+    <li id="1" class="active"><a >By Stock</a></li>
+    <li id="2" ><a >GBCE All Share Index </a></li>
+  </ul>
+  <div class="col-md-9" >
+    <div data-bind="template: { name: 'byStock'},visible:byStockVisibility()"></div>
+    <div data-bind="template:{ name: 'generalCalculus'},visible:generalCalculusVisibility()"></div>
+  </div>
+
+</div>
+
+<script id="byStock" type="text/html" >
+  <div class="row">
+    <div class="dropdown pull-right col-xs-6 col-sm-4 col-md-3" >
+      <select class="form-control" data-bind="options: StockModel.stocks,
+      optionsText: function(item) {
+        return item.stockSymbol
+      },
+      value: StockModel.selectedOption,
+      optionsCaption: 'Choose one stock'"></select>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="h-divider"></div>
+    <div class="row ">
+      <h4>Calculate </h4>
+    </div>
+
+    <div class="row">
+      <input  type="number" aling="right" id="price" placeholder="Enter a price (¢)" >
+    </div>
+    <div class="row ">
+
+      <button class="btn btn-default btn-md col-xs-6 col-sm-4 col-md-3 pull-right " id="dividedYieldButton" onclick="dividedYieldController()" >Divided Yield</button>
+
+      <button class="btn btn-default btn-md col-xs-6 col-sm-4 col-md-3 pull-right"id="pERatio" onclick="pERatioController()"  >P/E Ratio</button>
+
+
+      <label id="resultDY" aling="right"></label>
+
+      <label id="resultPE" aling="right"></label>
+    </div>
+    <div class="h-divider"></div>
+    <div class="row ">
+      <h4>Record a trade</h4>
+      <div class="col-md-4">
+        <table class="table" >
+          <tr>
+            <td><label class="hidden-xs">Quantity:</label></td>
+            <td><input  type="number" placeholder="Enter a quantity" type="text" aling="right" id="quantity" required="true"></td>
+          </tr>
+          <tr>
+            <td>  <label  class="hidden-xs">Price:</label></td>
+            <td> <input  type="number" placeholder="Enter a price (¢)" type="text" aling="right" id="priceToRecord" required="true"></td>
+          </tr>
+          <tr>
+            <td>  <label  class="hidden-xs">Operation:</label></td>
+            <td><div required="true">
+              <div class="radio">
+                <label><input type="radio" name="optradio" id="buying" >Buying</label>
+              </div>
+              <div class="radio">
+                <label><input type="radio" name="optradio" id="selling">Selling</label>
+              </div>
+            </div></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn btn-default btn-md  col-xs-6 col-sm-4 col-md-3 pull-right" onclick="addTradeController()" >Save</button></div>
+      <div class="h-divider"></div>
+      <div class="row ">
+        <h4>Volume Weighted Stock Price</h4>
+        <button class="btn btn-default btn-md col-xs-6 col-sm-4 col-md-3 pull-right" id="VWSP_last5Minutes" onclick="VWSP_last5MinutesController()" aling="right">Calculate </button>
+      </br>
+      <label id="result_VWSP_last5Minutes" aling="right"></label>
+
+    </div>
+  </div>
+</script>
+<script id="generalCalculus" class="col-md-9" type="text/html">
+  <div class="col-md-8">
+    <div class="h-divider"></div>
+    <h4>GBCE All Share Index </h4>
+    <button class="btn btn-default btn-md col-xs-6 col-sm-4 col-md-3 pull-right" id="GeneralCalculusButton" onclick="GeometricMeansForAllIndexController()" aling="right">Calculate </button>
+  </br>
+  <label id="GeneralCalculus" aling="right"></label>
+
+</div>
+</script>
+
+<!-- Modals -->
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" id="headingModal"></h4>
+      </div>
+      <div class="modal-body">
+        <p id="bodyModal"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default center-block" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+
+</html>
